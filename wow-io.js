@@ -77,6 +77,7 @@ for (const realm of realms) {
     realmInput.appendChild(option);
 }
 form.appendChild(realmInput);
+
 // Character name input
 const characterInput = document.createElement("input");
 characterInput.id = "inputCharacter";
@@ -188,6 +189,12 @@ function refreshTable() {
     updated.style.textAlign = "left";
     updated.innerText = "Updated";
     header.appendChild(updated);
+
+    for (let i = 0; i < 2; i++) {
+        const cell = document.createElement("th");
+        cell.innerText = "";
+        header.appendChild(cell);
+    }
 
     let index = 1;
     for (const character of myCharacters.sort((a, b) => b.io - a.io)) {
