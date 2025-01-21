@@ -161,6 +161,9 @@ function refreshTable() {
         if (field == "#") {
             cell.style.width = "20px";
         }
+        else if (field == "Spec") {
+            cell.style.width = "200px";
+        }
         else {
             cell.style.width = "100px";
         }
@@ -199,6 +202,9 @@ function refreshTable() {
     let index = 1;
     for (const character of myCharacters.sort((a, b) => b.io - a.io)) {
         const row = document.createElement("tr");
+        if (index % 2 == 0) {
+            row.style.backgroundColor = "#707070";
+        }
         const cell = document.createElement("td");
         cell.style.width = "20px";
         cell.style.textAlign = "right";
