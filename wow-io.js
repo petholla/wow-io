@@ -11,6 +11,7 @@ class Character {
         this.io = null;
         this.best_runs = {};
         this.updated = null;
+        this.thumbnail = null;
     }
 
     key() {
@@ -35,11 +36,17 @@ class Character {
             window.alert(data.message);
             return;
         }
+
+        console.log(data);
+
         this.class = data.class;
         this.spec = data.active_spec_name;
         this.role = data.active_spec_role;
         this.ilvl = Math.round(data.gear.item_level_equipped);
         this.io = data.mythic_plus_scores_by_season[0].scores.all;
+        this.thumbnail = data.thumbnail_url;
+
+        console.log(this);
 
         // get best key runs
         const runs = {};
@@ -137,6 +144,7 @@ function loadData() {
             newCharacter.io = character.io;
             newCharacter.best_runs = character.best_runs;
             newCharacter.updated = new Date(character.updated);
+            newCharacter.thumbnail = character.thumbnail;
             myCharacters.push(newCharacter);
         }
     }
@@ -151,7 +159,7 @@ function refreshTable() {
     const myTable = document.createElement("table");
     tableBody.appendChild(myTable);
 
-    const fields = ["#", "Realm", "Name", "Class", "Spec", "Role", "iLvl", "IO"];
+    const fields = ["#", "Image", "Realm", "Name", "Class", "Spec", "Role", "iLvl", "IO"];
     const dungeons = ["ARAK", "COT", "DAWN", "GB", "MISTS", "NW", "SIEGE", "SV"]
 
     // add header row
@@ -213,6 +221,18 @@ function refreshTable() {
 
         for (const field of fields) {
             if (field == "#") {
+                continue;
+            }
+            if (field == "Image") {
+                const imgCell = document.createElement("td");
+                imgCell.style.width = "10px";
+                imgCell.style.textAlign = "center";
+                const image = document.createElement("img");
+                console.log(character["thumbnail"]);
+                image.src = character["thumbnail"];
+                image.width = 50;
+                imgCell.appendChild(image);
+                row.appendChild(imgCell);
                 continue;
             }
             const cell = document.createElement("td");
