@@ -211,7 +211,7 @@ function refreshTable() {
     for (const character of myCharacters.sort((a, b) => b.io - a.io)) {
         const row = document.createElement("tr");
         if (index % 2 == 0) {
-            row.style.backgroundColor = "#707070";
+            row.style.backgroundColor = "#433436";
         }
         const cell = document.createElement("td");
         cell.style.width = "20px";
@@ -291,7 +291,7 @@ function refreshTable() {
     const update_all_row = document.createElement("tr");
     const update_all_cell = document.createElement("td");
     update_all_cell.style.textAlign = "center";
-    update_all_cell.colSpan = 19;
+    update_all_cell.colSpan = 20;
     const update_all_button = document.createElement("button");
     update_all_button.innerText = "Update All";
     update_all_button.addEventListener("click", handleEvent);

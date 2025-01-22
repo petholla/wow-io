@@ -1,25 +1,37 @@
 <html>
     <style>
         table {
-            border: 1px solid lightgray;
-            border-collapse: collapse;
+            /*border: 1px solid lightgray;*/
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            border-spacing: 1px;
             font-size: small;
         }
         th {
-            background-color: #808080;
+            background-color: #332426;
             color: white;
             padding: 6px;
         }
-        td {
-            border: 1px solid lightgray;
-            padding: 6px;
+        /* round corners */
+        th:first-of-type {
+            border-top-left-radius: 10px;
         }
-        #characterTableDiv {
-            margin-top: 20px;
+        th:last-of-type {
+            border-top-right-radius: 10px;
+        }
+        td {
+            /*border: 1px solid lightgray;*/
+            padding: 6px;
+            border-right: 1px solid rgb(0, 0, 0);
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+        td:last-of-type {
+            border-right: none;
+        }
+        tr:last-of-type {
+            border-bottom: none;
         }
         body {
-            background-color: #505050;
+            background-color: #130b07;
             color: white;
             font-family: sans-serif;
         }
