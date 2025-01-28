@@ -73,7 +73,7 @@ form.id = "addNewCharacterForm";
 const realmInput = document.createElement("select");
 realmInput.id = "inputRealm";
 realmInput.type = "text";
-const realms = ["Fizzcrank", "Aggramar"];
+const realms = ["Fizzcrank", "Aggramar", "Gorefiend"];
 for (const realm of realms) {
     const option = document.createElement("option");
     if (realm == "Fizzcrank") {
@@ -241,6 +241,9 @@ function refreshTable() {
             }
             else {
                 cell.style.textAlign = "left";
+            }
+            if (field == "Name") {
+                cell.style.fontWeight = "bold";
             }
             cell.innerText = character[field.toLowerCase()];
             row.appendChild(cell);
