@@ -195,23 +195,22 @@ function refreshTable() {
         header.appendChild(cell);
     }
 
-    const updated = document.createElement("th");
-    updated.style.width = "200px";
-    updated.style.textAlign = "left";
-    updated.innerText = "Updated";
-    header.appendChild(updated);
+    const extraHeaders = ["Updated", "Armory", "raider.io", "", ""];
 
-    for (let i = 0; i < 2; i++) {
-        const cell = document.createElement("th");
-        cell.innerText = "";
-        header.appendChild(cell);
+
+    for (const headerName of extraHeaders) {
+        const extraHeader = document.createElement("th");
+        extraHeader.style.width = "50px";
+        extraHeader.style.textAlign = "left";
+        extraHeader.innerText = headerName;
+        header.appendChild(extraHeader);
     }
 
     let index = 1;
     for (const character of myCharacters.sort((a, b) => b.io - a.io)) {
         const row = document.createElement("tr");
         if (index % 2 == 0) {
-            row.style.backgroundColor = "#433436";
+            row.style.backgroundColor = "#231416";
         }
         const cell = document.createElement("td");
         cell.style.width = "20px";
@@ -228,7 +227,7 @@ function refreshTable() {
                 imgCell.style.width = "10px";
                 imgCell.style.textAlign = "center";
                 const image = document.createElement("img");
-                console.log(character["thumbnail"]);
+                image.alt = "Character Thumbnail";
                 image.src = character["thumbnail"];
                 image.width = 50;
                 imgCell.appendChild(image);
@@ -254,6 +253,13 @@ function refreshTable() {
             cell.innerText = "";
             if (character.best_runs) {
                 if (dungeon in character.best_runs) {
+                    const just_key = Number(character.best_runs[dungeon].split("*")[0]);
+                    if ((just_key == 10 && character.best_runs[dungeon].includes("*")) || just_key >= 11) {
+                        cell.style.color = "yellow";
+                        cell.style.fontWeight = "bold";
+                        cell.title = "Portal aquired!";
+                    }
+                    console.log(just_key);
                     cell.innerText = character.best_runs[dungeon];
                 }
             }
@@ -264,6 +270,33 @@ function refreshTable() {
         updated.style.width = "200px";
         updated.innerText = character.updated.toLocaleString();
         row.appendChild(updated);
+
+        // links
+        const armoryLinkCell = document.createElement("td");
+        armoryLinkCell.style.textAlign = "center";
+        const armoryLink = document.createElement("a");
+        armoryLink.title = "Armory";
+        armoryLink.href = `https://worldofwarcraft.com/en-us/character/us/${character.realm}/${character.name}`;
+        armoryLink.target = "_blank";
+        armoryImage = document.createElement("img");
+        armoryImage.src = "img/armory.svg";
+        armoryImage.width = 30;
+        armoryLink.appendChild(armoryImage);
+        armoryLinkCell.appendChild(armoryLink);
+        row.appendChild(armoryLinkCell);
+
+        const raiderioLinkCell = document.createElement("td");
+        raiderioLinkCell.style.textAlign = "center";
+        const raiderioLink = document.createElement("a");
+        raiderioLink.title = "Armory";
+        raiderioLink.href = `https://raider.io/characters/us/${character.realm}/${character.name}`;
+        raiderioLink.target = "_blank";
+        raiderioImage = document.createElement("img");
+        raiderioImage.src = "img/raiderio.svg";
+        raiderioImage.width = 30;
+        raiderioLink.appendChild(raiderioImage);
+        raiderioLinkCell.appendChild(raiderioLink);
+        row.appendChild(raiderioLinkCell);
 
         // delete buttom for each row
         const deleteButtonCell = document.createElement("td");
@@ -291,7 +324,7 @@ function refreshTable() {
     const update_all_row = document.createElement("tr");
     const update_all_cell = document.createElement("td");
     update_all_cell.style.textAlign = "center";
-    update_all_cell.colSpan = 20;
+    update_all_cell.colSpan = 22;
     const update_all_button = document.createElement("button");
     update_all_button.innerText = "Update All";
     update_all_button.addEventListener("click", handleEvent);
