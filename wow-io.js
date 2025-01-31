@@ -1,5 +1,9 @@
 let myCharacters = [];
 
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 class Character {
     constructor(realm, name) {
         this.realm = realm;
@@ -14,11 +18,16 @@ class Character {
         this.thumbnail = null;
     }
 
-    key() {
+    get key() {
         return `${this.realm}-${this.name}`;
     }
 
     async fetchCharacter() {
+
+        document.getElementById("statusCell-" + this.key).innerHTML = "<img src='img/load-37_256.gif' width='20px' height='20px' />";
+
+        await sleep(1000);
+
         const myRequest = new Request("https://raider.io/api/v1/characters/profile?" + new URLSearchParams({
             "region": "us",
             "realm": this.realm,
@@ -37,16 +46,12 @@ class Character {
             return;
         }
 
-        console.log(data);
-
         this.class = data.class;
         this.spec = data.active_spec_name;
         this.role = data.active_spec_role;
         this.ilvl = Math.round(data.gear.item_level_equipped);
         this.io = data.mythic_plus_scores_by_season[0].scores.all;
         this.thumbnail = data.thumbnail_url;
-
-        console.log(this);
 
         // get best key runs
         const runs = {};
@@ -249,6 +254,7 @@ function refreshTable() {
             row.appendChild(cell);
         }
 
+        // loop thru all the dungeon scores
         for (const dungeon of dungeons) {
             const cell = document.createElement("td");
             cell.style.width = "50px";
@@ -262,7 +268,6 @@ function refreshTable() {
                         cell.style.fontWeight = "bold";
                         cell.title = "Portal aquired!";
                     }
-                    console.log(just_key);
                     cell.innerText = character.best_runs[dungeon];
                 }
             }
@@ -312,12 +317,22 @@ function refreshTable() {
 
         // update button for each row
         const updateButtonCell = document.createElement("td");
+        updateButtonCell.style.borderRight = "none";
         const updateButton = document.createElement("button");
         updateButton.character = character;
         updateButton.innerText = "Update";
         updateButton.addEventListener("click", handleEvent);
         updateButtonCell.appendChild(updateButton);
         row.appendChild(updateButtonCell);
+
+        // status icon colum
+        const statusCell = document.createElement("td");
+        statusCell.style.width = "50px";
+        statusCell.style.borderBottom = "none";
+        statusCell.style.backgroundColor = "#130b07";
+        statusCell.id = "statusCell-" + character.key;
+        statusCell.style.textAlign = "center";
+        row.appendChild(statusCell);
 
         myTable.appendChild(row);
 
