@@ -23,8 +23,10 @@ class Character {
     }
 
     async fetchCharacter() {
-
-        document.getElementById("statusCell-" + this.key).innerHTML = "<img src='img/load-37_256.gif' width='20px' height='20px' />";
+        const cell = document.getElementById("statusCell-" + this.key);
+        if (cell) {
+            document.getElementById("statusCell-" + this.key).innerHTML = "<img src='img/load-37_256.gif' width='20px' height='20px' />";
+        }
 
         await sleep(1000);
 
@@ -39,7 +41,7 @@ class Character {
         if (response.status == 500) {
             window.alert("Server error! Please try again later.");
             return;
-        }
+        }           
         const data = await response.json();
         if (data.statusCode == 400) {
             window.alert(data.message);
