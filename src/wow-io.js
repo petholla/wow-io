@@ -1,5 +1,5 @@
 import Character from "./character.mjs";
-import { addNewCharacterForm } from "./ui.mjs";
+import { addNewCharacterForm, addNotes } from "./ui.mjs";
 
 let myCharacters = [];
 
@@ -10,6 +10,8 @@ async function sleep(ms) {
 addNewCharacterForm(addCharacter);
 
 loadData();
+
+addNotes();
 
 function addCharacter(event) {
     // prevent a reload
@@ -261,7 +263,6 @@ function refreshTable() {
         row.appendChild(statusCell);
 
         myTable.appendChild(row);
-
     }
 
     // add row to table
@@ -276,6 +277,9 @@ function refreshTable() {
     update_all_row.appendChild(update_all_cell);
     update_all_cell.appendChild(update_all_button);
     myTable.appendChild(update_all_row);
+
+    const lineBreak = document.createElement("br");
+    tableBody.appendChild(lineBreak);
 }
 
 function handleEvent(event) {

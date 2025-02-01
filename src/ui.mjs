@@ -55,12 +55,28 @@ export function addNewCharacterForm(eventFunction) {
     submitButton.type = "submit";
     submitButton.innerText = "Add Character";
     submitButton.addEventListener("click", eventFunction);
-    const lineBreak = document.createElement("br");
-    
-    formDiv.appendChild(lineBreak);
- //   formDiv.appendChild(submitButton);
-    //form.appendChild(submitButton);
-    //formDiv.appendChild(form);
 
-    //document.getElementById("addNewCharacterForm").addEventListener("submit", addCharacter);
+    const lineBreak = document.createElement("br");  
+    formDiv.appendChild(lineBreak);
+}
+
+export function addNotes() {
+    const notes = document.getElementById("Notes");
+    const notesTable = document.createElement("table");
+    notesTable.id = "notesTable";
+    notes.appendChild(notesTable);
+    const headerRow = document.createElement("tr");
+    notesTable.appendChild(headerRow);
+    const notesHeader = document.createElement("th");
+    notesHeader.className = "rounded";
+    notesHeader.innerText = "Notes";
+    headerRow.appendChild(notesHeader);
+
+    const notesRow = document.createElement("tr");
+    notesTable.appendChild(notesRow);
+
+    const notesCell = document.createElement("td");
+    notesRow.appendChild(notesCell);
+    notesCell.innerHTML = "<li>You can click on a character name to highlight it (e.g. your alts). Click again to unhighlight.</li>";
+    notesCell.innerHTML += "<li>Key levels are highlighted in yellow at 10 or above (portals).</li>";
 }
