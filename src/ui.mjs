@@ -1,0 +1,66 @@
+export function addNewCharacterForm(eventFunction) {
+    // add character form
+    const inputTable = document.createElement("table");
+    inputTable.id = "addCharacterTable";
+    const formRow = document.createElement("tr");
+    const headers = ["Realm", "Character", ""];
+    for (const header of headers) {
+        const th = document.createElement("th");
+        th.className = "rounded";
+        th.innerText = header;
+        formRow.appendChild(th);
+    }
+    inputTable.appendChild(formRow);
+    const formDiv = document.getElementById("addCharacterDiv");
+    formDiv.appendChild(inputTable);
+
+    const inputRow = document.createElement("tr");
+    inputTable.appendChild(inputRow);
+    const realmCell = document.createElement("td");
+    inputRow.appendChild(realmCell);
+    const realmInput = document.createElement("select");
+    realmCell.appendChild(realmInput);
+    realmInput.id = "inputRealm";
+
+    const realms = ["Fizzcrank", "Aggramar", "Gorefiend"];
+    for (const realm of realms) {
+        const option = document.createElement("option");
+        if (realm == "Fizzcrank") {
+            option.selected = true;
+        }
+        option.value = realm;
+        option.innerText = realm;
+        realmInput.appendChild(option);
+    }
+
+    // Character name input
+    const characterInput = document.createElement("input");
+    characterInput.id = "inputCharacter";
+    characterInput.type = "text";
+    characterInput.placeholder = "Name";
+    characterInput.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            eventFunction(event);
+        }
+    });
+    const nameCell = document.createElement("td");
+    inputRow.appendChild(nameCell);
+    nameCell.appendChild(characterInput);
+
+    const submitCell = document.createElement("td");
+    inputRow.appendChild(submitCell);
+
+    const submitButton = document.createElement("button");
+    submitCell.appendChild(submitButton);
+    submitButton.type = "submit";
+    submitButton.innerText = "Add Character";
+    submitButton.addEventListener("click", eventFunction);
+    const lineBreak = document.createElement("br");
+    
+    formDiv.appendChild(lineBreak);
+ //   formDiv.appendChild(submitButton);
+    //form.appendChild(submitButton);
+    //formDiv.appendChild(form);
+
+    //document.getElementById("addNewCharacterForm").addEventListener("submit", addCharacter);
+}

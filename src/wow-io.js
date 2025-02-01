@@ -1,4 +1,5 @@
 import Character from "./character.mjs";
+import { addNewCharacterForm } from "./ui.mjs";
 
 let myCharacters = [];
 
@@ -6,48 +7,19 @@ async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+addNewCharacterForm(addCharacter);
+
 loadData();
 
-// add character form
-const formDiv = document.getElementById("addCharacterDiv");
-const form = document.createElement("form");
-form.id = "addNewCharacterForm";
-const realmInput = document.createElement("select");
-realmInput.id = "inputRealm";
-//realmInput.type = "text";
-const realms = ["Fizzcrank", "Aggramar", "Gorefiend"];
-for (const realm of realms) {
-    const option = document.createElement("option");
-    if (realm == "Fizzcrank") {
-        option.selected = true;
-    }
-    option.value = realm;
-    option.innerText = realm;
-    realmInput.appendChild(option);
-}
-form.appendChild(realmInput);
-
-// Character name input
-const characterInput = document.createElement("input");
-characterInput.id = "inputCharacter";
-characterInput.type = "text";
-characterInput.placeholder = "Character";
-form.appendChild(characterInput);
-
-const submitButton = document.createElement("button");
-submitButton.type = "submit";
-submitButton.innerText = "Add Character";
-form.appendChild(submitButton);
-formDiv.appendChild(form);
-
-document.getElementById("addNewCharacterForm").addEventListener("submit", clicked);
-
-function clicked(event) {
+function addCharacter(event) {
     // prevent a reload
     event.preventDefault();
 
     const newCharacterRealm = document.getElementById("inputRealm").value;
-    const newCharacterName = document.getElementById("inputCharacter").value;  
+    let newCharacterName = document.getElementById("inputCharacter").value;  
+
+    // capitalize character name
+    newCharacterName = newCharacterName.charAt(0).toUpperCase() + newCharacterName.slice(1).toLowerCase();
 
     // check if character already exists
     for (const character of myCharacters) {
@@ -109,6 +81,7 @@ function refreshTable() {
     const header = document.createElement("tr");
     for (const field of fields) {
         const cell = document.createElement("th");
+        cell.className = "rounded";
         if (field == "#") {
             cell.style.width = "20px";
         }
@@ -187,10 +160,11 @@ function refreshTable() {
             }
             if (field == "Name") {
                 cell.style.fontWeight = "bold";
-                console.log(character.key, character.mine);
                 if (character.mine) {
                     cell.style.color = "red";
                 }
+                // add click event to mark character as mine
+                // and then highlight it in the list
                 cell.onclick = function(event) {
                     if (character.mine) {
                         character.mine = false;
@@ -292,6 +266,7 @@ function refreshTable() {
 
     // add row to table
     const update_all_row = document.createElement("tr");
+    update_all_row.className = "rounded";
     const update_all_cell = document.createElement("td");
     update_all_cell.style.textAlign = "center";
     update_all_cell.colSpan = 22;
