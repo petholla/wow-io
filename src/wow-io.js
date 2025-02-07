@@ -1,5 +1,5 @@
-import Character from "./character.mjs";
-import { addNewCharacterForm, addNotes } from "./ui.mjs";
+import Character from "./character.js";
+import { addNewCharacterForm, addNotes } from "./ui.js";
 
 let myCharacters = [];
 
