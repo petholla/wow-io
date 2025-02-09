@@ -1,5 +1,6 @@
 import Character from "./character.js";
-import { addNewCharacterForm, addNotesSection, addRefreshSection } from "./ui.js";
+import { addNewCharacterForm, addNotesSection } from "./ui.js";
+import { refreshCounter } from "./refresh.js";
 
 let myCharacters = [];
 
@@ -12,43 +13,12 @@ addNewCharacterForm(addCharacter);
 // load data from browser storage
 loadData();
 
-addRefreshSection(changeRefresh);
-
 addNotesSection();
 
 reloadAllCharacters();
 
-let refreshPeriod = 1;
-
-if (localStorage.getItem("refreshPeriodMinutes")) {
-    refreshPeriod = localStorage.getItem("refreshPeriodMinutes");
-    console.log("refreshPeriodMinutes: " + refreshPeriod);
-    document.getElementById("refreshSelector").value = refreshPeriod;
-}
-
-let counter = refreshPeriod * 60;
-
-incrementCounter();
-
-function changeRefresh(event) {
-    // change the refresh counter
-    refreshPeriod = event.target.value;
-    localStorage.setItem("refreshPeriodMinutes", refreshPeriod);
-    counter = refreshPeriod * 60;
-    console.log(event.target.value);
-}
-
-function incrementCounter() {
-    // increment the counter
-    const refreshDiv = document.getElementById("refreshCounter");
-    counter--;
-    refreshDiv.innerText = `${counter} s`;
-    if (counter == 0) {
-        reloadAllCharacters();
-        counter = refreshPeriod * 60;
-    }
-    setTimeout(incrementCounter, 1000);
-}
+let counter = new refreshCounter();
+counter.start();
 
 function addCharacter(event) {
     // prevent a reload
