@@ -36,8 +36,9 @@ export default class Character {
             "name": this.name,
             "fields": "mythic_plus_scores_by_season:current,mythic_plus_best_runs,gear"
         }));
-
+        console.log("fetching " + myRequest.url);
         const response = await fetch(myRequest);
+        console.log("response status: " + response.status);
         if (response.status == 500) {
             window.alert("Server error! Please try again later.");
             return;
