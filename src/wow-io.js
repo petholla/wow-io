@@ -1,5 +1,5 @@
 import Character from "./character.js";
-import { addNewCharacterForm, addNotes } from "./ui.js";
+import { addNewCharacterForm, addNotesSection, addRefreshSection } from "./ui.js";
 
 let myCharacters = [];
 
@@ -9,9 +9,48 @@ async function sleep(ms) {
 
 addNewCharacterForm(addCharacter);
 
+// load data from browser storage
 loadData();
 
-addNotes();
+addRefreshSection(changeRefresh);
+
+addNotesSection();
+
+reloadAllCharacters();
+
+let refreshPeriod = 1;
+
+if (localStorage.getItem("refreshPeriodMinutes")) {
+    refreshPeriod = localStorage.getItem("refreshPeriodMinutes");
+    console.log("refreshPeriodMinutes: " + refreshPeriod);
+    document.getElementById("refreshSelector").value = refreshPeriod;
+}
+
+let counter = refreshPeriod * 60;
+
+incrementCounter();
+
+function changeRefresh(event) {
+    // change the refresh counter
+    //counter = 10;
+//    incrementCounter();
+    refreshPeriod = event.target.value;
+    localStorage.setItem("refreshPeriodMinutes", refreshPeriod);
+    counter = refreshPeriod * 60;
+    console.log(event.target.value);
+}
+
+function incrementCounter() {
+    // increment the counter
+    const refreshDiv = document.getElementById("refreshCounter");
+    counter--;
+    refreshDiv.innerText = `${counter} s`;
+    if (counter == 0) {
+        reloadAllCharacters();
+        counter = refreshPeriod;
+    }
+    setTimeout(incrementCounter, 1000);
+}
 
 function addCharacter(event) {
     // prevent a reload
@@ -113,11 +152,12 @@ function refreshTable() {
         header.appendChild(cell);
     }
 
-    const extraHeaders = ["Updated", "Armory", "raider.io", "", ""];
+    const extraHeaders = ["Updated", "Armory", "raider.io", "", "", ""];
 
 
     for (const headerName of extraHeaders) {
         const extraHeader = document.createElement("th");
+        extraHeader.className = "rounded";
         extraHeader.style.width = "50px";
         extraHeader.style.textAlign = "left";
         extraHeader.innerText = headerName;
@@ -256,8 +296,6 @@ function refreshTable() {
         // status icon colum
         const statusCell = document.createElement("td");
         statusCell.style.width = "50px";
-        statusCell.style.borderBottom = "none";
-        statusCell.style.backgroundColor = "#130b07";
         statusCell.id = "statusCell-" + character.key;
         statusCell.style.textAlign = "center";
         row.appendChild(statusCell);
@@ -270,16 +308,13 @@ function refreshTable() {
     update_all_row.className = "rounded";
     const update_all_cell = document.createElement("td");
     update_all_cell.style.textAlign = "center";
-    update_all_cell.colSpan = 22;
+    update_all_cell.colSpan = 23;
     const update_all_button = document.createElement("button");
     update_all_button.innerText = "Update All";
     update_all_button.addEventListener("click", handleEvent);
     update_all_row.appendChild(update_all_cell);
     update_all_cell.appendChild(update_all_button);
     myTable.appendChild(update_all_row);
-
-    const lineBreak = document.createElement("br");
-    tableBody.appendChild(lineBreak);
 }
 
 function handleEvent(event) {
@@ -301,19 +336,24 @@ function handleEvent(event) {
     }
     // update all characters
     else if (action == "Update All") {
-        for (const character of myCharacters) {
-            character.fetchCharacter().then(response => {
-                if (response) {
-                    saveData();
-                    refreshTable();
-                }
-            });
-        }
+        reloadAllCharacters();
     }   
     else {
         console.error("Unknown action: %s", action);
     }
     
+}
+
+function reloadAllCharacters() {
+    // reload all characters
+    for (const character of myCharacters) {
+        character.fetchCharacter().then(response => {
+            if (response) {
+                saveData();
+                refreshTable();
+            }
+        });
+    }
 }
 
 function deleteCharacter(character) {

@@ -39,10 +39,38 @@
                 color: white;
                 font-family: sans-serif;
             }
+
+            /* grid layout */
+            .myGrid {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-rows: auto auto auto;
+                row-gap: 20px;
+            }
+            .addCharacterDiv {
+                grid-column: 1;
+                grid-row: 1;
+            }
+            .refreshDiv {
+                grid-column: 2;
+                grid-row: 1;
+                justify-self: end;
+            }
+            .characterTableDiv {
+                grid-column: 1 / 3;
+                grid-row: 2;
+            }
+            .Notes {
+                grid-column: 1 / 3;
+                grid-row: 3;
+            }
         </style>
-        <div id="addCharacterDiv"></div>    
-        <div id="characterTableDiv"></div>
-        <div id="Notes"></div>
+        <div class="myGrid">
+            <div id="addCharacterDiv" class="addCharacterDiv"></div>
+            <div id="refreshDiv" class="refreshDiv"></div>
+            <div id="characterTableDiv" class="characterTableDiv"></div>
+            <div id="Notes" class="Notes"></div>
+        </div>
         <script type="module" src="/src/wow-io.js"></script>
     </body>
 </html>
