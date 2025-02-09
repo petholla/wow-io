@@ -312,7 +312,7 @@ function handleEvent(event) {
     
 }
 
-function reloadAllCharacters() {
+export function reloadAllCharacters() {
     // reload all characters
     for (const character of myCharacters) {
         character.fetchCharacter().then(response => {

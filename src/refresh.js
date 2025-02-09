@@ -1,3 +1,5 @@
+import { reloadAllCharacters } from "./wow-io.js";
+
 export class refreshCounter {
     // refresh counter class
     constructor() {
@@ -114,7 +116,6 @@ function addRefreshSection(minutes) {
 
     const textNode = document.createTextNode(" minute(s)");
     refreshCell.appendChild(textNode);
-//    refreshCell.textContent += " minutes";
 
     const refreshCounterCell = document.createElement("td");
     refreshCounterCell.id = "refreshCounter";
