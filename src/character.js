@@ -1,3 +1,5 @@
+import { sleep } from "./common.js";
+
 // wow character class
 
 export default class Character {
@@ -14,6 +16,7 @@ export default class Character {
         this.thumbnail = null;
         this.status = "";
         this.mine = false;
+        this.loading = false
     }
 
     get key() {
@@ -22,13 +25,11 @@ export default class Character {
 
     async fetchCharacter() {
         // fetch character data from raider.io
-        this.status = "loading";
+        this.loading = true;
         const cell = document.getElementById("statusCell-" + this.key);
         if (cell) {
             document.getElementById("statusCell-" + this.key).innerHTML = "<img src='img/load-37_256.gif' width='20px' height='20px' />";
         }
-
-        //await sleep(1000);
 
         const myRequest = new Request("https://raider.io/api/v1/characters/profile?" + new URLSearchParams({
             "region": "us",
@@ -36,9 +37,15 @@ export default class Character {
             "name": this.name,
             "fields": "mythic_plus_scores_by_season:current,mythic_plus_best_runs,gear"
         }));
-        console.log("fetching " + myRequest.url);
+
         const response = await fetch(myRequest);
-        console.log("response status: " + response.status);
+
+        // pretend to wait for the response to make it look better
+        const random = Math.random() * 1000;
+        await sleep(random);
+
+        this.loading = false;
+
         if (response.status == 500) {
             window.alert("Server error! Please try again later.");
             return;
@@ -49,11 +56,21 @@ export default class Character {
             return;
         }
 
+        let changed = false;
+
         this.class = data.class;
         this.spec = data.active_spec_name;
         this.role = data.active_spec_role;
-        this.ilvl = Math.round(data.gear.item_level_equipped);
-        this.io = data.mythic_plus_scores_by_season[0].scores.all;
+        const newIlvl = Math.round(data.gear.item_level_equipped);
+        if (this.ilvl != newIlvl) {
+            this.ilvl = newIlvl;
+            changed = true;
+        }
+        const newIO = data.mythic_plus_scores_by_season[0].scores.all;
+        if (this.io != newIO) {
+            this.io = newIO;
+            changed = true;
+        }
         this.thumbnail = data.thumbnail_url;
 
         // get best key runs
@@ -66,7 +83,9 @@ export default class Character {
             runs[run.short_name] = key_level;
         }
         this.best_runs = runs;
-        this.updated = new Date();
+        if (changed) {
+            this.updated = new Date();
+        }
 
         return true;
   }

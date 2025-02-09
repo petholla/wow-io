@@ -1,5 +1,5 @@
 import Character from "./character.js";
-import { addNewCharacterForm, addNotesSection } from "./ui.js";
+import { addNewCharacterForm, addNotesSection, addAdminSection } from "./ui.js";
 import { refreshCounter } from "./refresh.js";
 
 let myCharacters = [];
@@ -14,6 +14,8 @@ addNewCharacterForm(addCharacter);
 loadData();
 
 addNotesSection();
+
+addAdminSection();
 
 reloadAllCharacters();
 
@@ -263,9 +265,10 @@ function refreshTable() {
 
         // status icon colum
         const statusCell = document.createElement("td");
-        statusCell.style.width = "50px";
+        statusCell.style.width = "100px";
         statusCell.id = "statusCell-" + character.key;
         statusCell.style.textAlign = "center";
+        statusCell.innerHTML = character.loading ? "<img src='img/load-37_256.gif' width='20px'/>" : "";
         row.appendChild(statusCell);
 
         myTable.appendChild(row);
