@@ -1,4 +1,4 @@
-import { reloadAllCharacters } from "/src/wow-io.js";
+import { reloadAllCharacters } from "./wow-io.js";
 
 export class refreshCounter {
     // refresh counter class

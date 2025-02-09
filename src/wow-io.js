@@ -1,6 +1,6 @@
-import Character from "/src/character.js";
-import { addNewCharacterForm, addNotesSection } from "/src/ui.js";
-import { refreshCounter } from "/src/refresh.js";
+import Character from "./character.js";
+import { addNewCharacterForm, addNotesSection } from "./ui.js";
+import { refreshCounter } from "./refresh.js";
 
 let myCharacters = [];
 
