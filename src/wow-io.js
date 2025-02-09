@@ -32,8 +32,6 @@ incrementCounter();
 
 function changeRefresh(event) {
     // change the refresh counter
-    //counter = 10;
-//    incrementCounter();
     refreshPeriod = event.target.value;
     localStorage.setItem("refreshPeriodMinutes", refreshPeriod);
     counter = refreshPeriod * 60;
@@ -47,7 +45,7 @@ function incrementCounter() {
     refreshDiv.innerText = `${counter} s`;
     if (counter == 0) {
         reloadAllCharacters();
-        counter = refreshPeriod;
+        counter = refreshPeriod * 60;
     }
     setTimeout(incrementCounter, 1000);
 }
