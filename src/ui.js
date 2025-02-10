@@ -1,4 +1,5 @@
 import { setDebugMode } from "./common.js";
+import { myCharacters, addCharacter } from "./wow-io.js";
 
 export function addNewCharacterForm(eventFunction) {
     // add character form
@@ -91,10 +92,13 @@ export function addAdminSection() {
     adminDiv.appendChild(adminTable);
     const headerRow = document.createElement("tr");
     adminTable.appendChild(headerRow);
-    const adminHeader = document.createElement("th");
-    adminHeader.innerText = "Debug";
-    adminHeader.className = "rounded";
-    headerRow.appendChild(adminHeader);
+    const adminHeaderNames = ["Debug", "Export", "Import"];
+    for (const header of adminHeaderNames) {
+        const adminHeader = document.createElement("th");
+        adminHeader.innerText = header;
+        adminHeader.className = "rounded";
+        headerRow.appendChild(adminHeader);
+    }
     const adminRow = document.createElement("tr");
     adminTable.appendChild(adminRow);
     const debugCell = document.createElement("td");
@@ -111,9 +115,47 @@ export function addAdminSection() {
         setDebugMode(localStorageDebugMode);
     }
     debugCell.appendChild(debugCheckbox);
-    debugCell.title = "Check for debug messages to console.";
+    debugCell.title = "Check for sending debug info to console.";
 
     debugCheckbox.addEventListener("change", function(event) {
         setDebugMode(event.target.checked);
+    });
+
+    // Export button
+    const exportCell = document.createElement("td");
+    exportCell.style.textAlign = "center";
+    const exportButton = document.createElement("button");
+    exportCell.appendChild(exportButton);
+    exportButton.innerText = "Export";
+    exportButton.id = "exportButton";
+    adminRow.appendChild(exportCell);
+
+    exportButton.addEventListener("click", function() {
+        const characterList = [];
+        for (const character of myCharacters) {
+            characterList.push({
+                realm: character.realm,
+                name: character.name,
+            })
+        }
+        const data = btoa(JSON.stringify(characterList));
+        navigator.clipboard.writeText(data);
+        window.alert("Character list copied to clipboard.");
+    });
+
+    // Import button
+    const importCell = document.createElement("td");
+    importCell.style.textAlign = "center";
+    const importButton = document.createElement("button");
+    importCell.appendChild(importButton);
+    importButton.innerText = "Import";
+    importButton.id = "importButton";
+    adminRow.appendChild(importCell);
+    importButton.addEventListener("click", function() {
+        const data = prompt("Paste the exported data here.");
+        const characterList = JSON.parse(atob(data));
+        for (const character of characterList) {
+            addCharacter(character.realm, character.name);
+        }
     });
 }

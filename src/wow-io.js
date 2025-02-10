@@ -3,13 +3,13 @@ import { addNewCharacterForm, addNotesSection, addAdminSection } from "./ui.js";
 import { refreshCounter } from "./refresh.js";
 import { setDebugMode, logMessage } from "./common.js";
 
-let myCharacters = [];
+export let myCharacters = [];
 
 async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-addNewCharacterForm(addCharacter);
+addNewCharacterForm(addCharacterHandler);
 
 // load data from browser storage
 loadData();
@@ -23,26 +23,33 @@ reloadAllCharacters();
 let counter = new refreshCounter();
 counter.start();
 
-function addCharacter(event) {
+function addCharacterHandler(event) {
     // prevent a reload
     event.preventDefault();
 
     const newCharacterRealm = document.getElementById("inputRealm").value;
-    let newCharacterName = document.getElementById("inputCharacter").value;  
+    const newCharacterName = document.getElementById("inputCharacter").value;  
+
+    addCharacter(newCharacterRealm, newCharacterName);
+}
+
+export function addCharacter(realm, name) {
 
     // capitalize character name
-    newCharacterName = newCharacterName.charAt(0).toUpperCase() + newCharacterName.slice(1).toLowerCase();
+    name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+    logMessage(`Adding character ${name} from realm ${realm}.`);
 
     // check if character already exists
     for (const character of myCharacters) {
-        if (character.realm == newCharacterRealm && character.name == newCharacterName) {
-            window.alert("Character already exists!");
+        if (character.realm == realm && character.name == name) {
+            window.alert(`${name} on ${realm} is already on the list!`);
             return;
         }
     }
 
     // add new character
-    const newCharacter = new Character(newCharacterRealm, newCharacterName);
+    const newCharacter = new Character(realm, name);
     newCharacter.fetchCharacter().then(response => {
         if (response) {
             myCharacters.push(newCharacter);
