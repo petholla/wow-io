@@ -94,16 +94,14 @@ function refreshTable() {
         const cell = document.createElement("th");
         cell.className = "rounded";
         if (field == "#") {
-            cell.style.width = "20px";
+            cell.style.width = "1%";
         }
-        else if (field == "Spec") {
-            cell.style.width = "200px";
+        else if (["Class", "Spec", "Role"].includes(field)) {
+            cell.style.width = "8%";
         }
-        else {
-            cell.style.width = "100px";
-        }
-        if (["iLvl", "IO", "#"].includes(field)) {
+        else if (["iLvl", "IO"].includes(field)) {
             cell.style.textAlign = "right";
+            cell.style.width = "3%";
         }
         else {
             cell.style.textAlign = "left";
@@ -116,19 +114,25 @@ function refreshTable() {
     // add dungeons
     for (const dungeon of dungeons) {
         const cell = document.createElement("th");
-        cell.style.width = "50px";
+        cell.style.width = "3%";
         cell.style.textAlign = "center";
         cell.innerText = dungeon;
         header.appendChild(cell);
     }
 
-    const extraHeaders = ["Updated", "Armory", "raider.io", "", "", ""];
+    const extraHeaders = [
+        "Updated",
+        "Armory",
+        "raider.io",
+        "",
+        "",
+        "",
+    ]
 
 
     for (const headerName of extraHeaders) {
         const extraHeader = document.createElement("th");
         extraHeader.className = "rounded";
-        extraHeader.style.width = "50px";
         extraHeader.style.textAlign = "left";
         extraHeader.innerText = headerName;
         header.appendChild(extraHeader);
@@ -141,7 +145,7 @@ function refreshTable() {
             row.style.backgroundColor = "#231416";
         }
         const cell = document.createElement("td");
-        cell.style.width = "20px";
+        //cell.style.width = "5%";
         cell.style.textAlign = "right";
         cell.innerText = index++;
         row.appendChild(cell);
@@ -152,7 +156,7 @@ function refreshTable() {
             }
             if (field == "Image") {
                 const imgCell = document.createElement("td");
-                imgCell.style.width = "10px";
+                //imgCell.style.width = "10px";
                 imgCell.style.textAlign = "center";
                 const image = document.createElement("img");
                 image.alt = "Character Thumbnail";
@@ -163,7 +167,7 @@ function refreshTable() {
                 continue;
             }
             const cell = document.createElement("td");
-            cell.style.width = "100px";
+            //cell.style.width = "100px";
             if (["iLvl", "IO"].includes(field)) {
                 cell.style.textAlign = "right";
             }
@@ -195,7 +199,7 @@ function refreshTable() {
         // loop thru all the dungeon scores
         for (const dungeon of dungeons) {
             const cell = document.createElement("td");
-            cell.style.width = "50px";
+            //cell.style.width = "50px";
             cell.style.textAlign = "center";
             cell.innerText = "";
             if (character.best_runs) {
@@ -213,7 +217,7 @@ function refreshTable() {
         }
 
         const updated = document.createElement("td");
-        updated.style.width = "200px";
+        //updated.style.width = "200px";
         updated.innerText = character.updated.toLocaleString();
         row.appendChild(updated);
 
@@ -265,7 +269,7 @@ function refreshTable() {
 
         // status icon colum
         const statusCell = document.createElement("td");
-        statusCell.style.width = "100px";
+        //statusCell.style.width = "100px";
         statusCell.id = "statusCell-" + character.key;
         statusCell.style.textAlign = "center";
         statusCell.innerHTML = character.loading ? "<img src='img/load-37_256.gif' width='20px'/>" : "";
