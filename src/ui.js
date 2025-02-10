@@ -5,6 +5,7 @@ export function addNewCharacterForm(eventFunction) {
     // add character form
     const inputTable = document.createElement("table");
     inputTable.id = "addCharacterTable";
+    inputTable.style.width = "50%";
     const formRow = document.createElement("tr");
     const headers = ["Realm", "Character", ""];
     for (const header of headers) {
