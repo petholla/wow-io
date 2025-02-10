@@ -1,3 +1,5 @@
+import { setDebugMode } from "./common.js";
+
 export function addNewCharacterForm(eventFunction) {
     // add character form
     const inputTable = document.createElement("table");
@@ -101,5 +103,17 @@ export function addAdminSection() {
     const debugCheckbox = document.createElement("input");
     debugCheckbox.type = "checkbox";
     debugCheckbox.id = "debugCheckbox";
+
+    // check if debug mode is enabled in local storage
+    const localStorageDebugMode = (localStorage.getItem("debugMode") === "true");
+    if (localStorageDebugMode) {
+        debugCheckbox.checked = localStorageDebugMode;
+        setDebugMode(localStorageDebugMode);
+    }
     debugCell.appendChild(debugCheckbox);
+    debugCell.title = "Check for debug messages to console.";
+
+    debugCheckbox.addEventListener("change", function(event) {
+        setDebugMode(event.target.checked);
+    });
 }

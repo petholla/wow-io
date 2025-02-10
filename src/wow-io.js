@@ -1,6 +1,7 @@
 import Character from "./character.js";
 import { addNewCharacterForm, addNotesSection, addAdminSection } from "./ui.js";
 import { refreshCounter } from "./refresh.js";
+import { setDebugMode, logMessage } from "./common.js";
 
 let myCharacters = [];
 
@@ -132,6 +133,9 @@ function refreshTable() {
 
     for (const headerName of extraHeaders) {
         const extraHeader = document.createElement("th");
+        if (headerName == "Updated") {
+            extraHeader.style.width = "15%";
+        }
         extraHeader.className = "rounded";
         extraHeader.style.textAlign = "left";
         extraHeader.innerText = headerName;
