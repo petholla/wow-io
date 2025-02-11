@@ -1,13 +1,9 @@
 import Character from "./character.js";
 import { addNewCharacterForm, addNotesSection, addAdminSection } from "./ui.js";
 import { refreshCounter } from "./refresh.js";
-import { setDebugMode, logMessage } from "./common.js";
+import { setDebugMode, logMessage, sleep } from "./common.js";
 
 export let myCharacters = [];
-
-async function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 addNewCharacterForm(addCharacterHandler);
 
@@ -23,17 +19,21 @@ reloadAllCharacters();
 let counter = new refreshCounter();
 counter.start();
 
-function addCharacterHandler(event) {
+async function addCharacterHandler(event) {
     // prevent a reload
     event.preventDefault();
 
     const newCharacterRealm = document.getElementById("inputRealm").value;
     const newCharacterName = document.getElementById("inputCharacter").value;  
 
-    addCharacter(newCharacterRealm, newCharacterName);
+    //
+    const submitButton = document.getElementById("addCharacterButton");
+    submitButton.disabled = true;
+    await addCharacter(newCharacterRealm, newCharacterName);
+    submitButton.disabled = false;
 }
 
-export function addCharacter(realm, name) {
+export async function addCharacter(realm, name) {
 
     // capitalize character name
     name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
@@ -50,7 +50,7 @@ export function addCharacter(realm, name) {
 
     // add new character
     const newCharacter = new Character(realm, name);
-    newCharacter.fetchCharacter().then(response => {
+    await newCharacter.fetchCharacter().then(response => {
         if (response) {
             myCharacters.push(newCharacter);
             saveData();

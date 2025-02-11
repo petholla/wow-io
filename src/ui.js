@@ -56,6 +56,7 @@ export function addNewCharacterForm(eventFunction) {
 
     const submitButton = document.createElement("button");
     submitCell.appendChild(submitButton);
+    submitButton.id = "addCharacterButton";
     submitButton.type = "submit";
     submitButton.innerText = "Add Character";
     submitButton.addEventListener("click", eventFunction);
