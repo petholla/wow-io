@@ -153,8 +153,6 @@ export function addAdminSection() {
 
         const popUp = document.getElementById("importPopUp");
         if (popUp) {
-            //const inputArea = document.getElementById("importTextArea");
-            //inputArea.focus();
             popUp.remove();
         }
     }
@@ -167,8 +165,10 @@ export function addAdminSection() {
     importButton.innerText = "Import";
     importButton.id = "importButton";
     adminRow.appendChild(importCell);
-    importButton.addEventListener("mousedown", function(event) {
-        console.log(event);
+    importButton.addEventListener("click", function(event) {
+        if (document.getElementById("importPopUp")) {
+            return;
+        }
         event.preventDefault();
         const popUp = document.createElement("div");
         popUp.id = "importPopUp";
@@ -181,8 +181,7 @@ export function addAdminSection() {
         textArea.style.position = "absolute";
         textArea.style.top = "10%";
         textArea.style.left = "10%";
-        textArea.placeholder = "Paste the exported data here.";
-        textArea.focus();
+        textArea.placeholder = "Paste the exported data here, or press Escape to close.";
         popUp.appendChild(textArea);
         const closeButton = document.createElement("button");
         closeButton.style.position = "absolute";
@@ -191,8 +190,14 @@ export function addAdminSection() {
         closeButton.style.bottom = "3%";
         closeButton.innerText = "Import";
         closeButton.addEventListener("click", function() {
-            const data = document.getElementById("importTextArea").value
-            console.log(data)
+            const data = document.getElementById("importTextArea").value;
+            try {
+                const characterList = JSON.parse(atob(data));
+            }
+            catch (error) {
+                window.alert("Invalid data.");
+                return;
+            }
             const characterList = JSON.parse(atob(data));
             for (const character of characterList) {
                 addCharacter(character.realm, character.name);
@@ -201,5 +206,6 @@ export function addAdminSection() {
         });
         popUp.appendChild(closeButton);
         document.body.appendChild(popUp);
+        textArea.focus();
     });
 }
