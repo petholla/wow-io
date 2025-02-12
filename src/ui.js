@@ -145,6 +145,20 @@ export function addAdminSection() {
         window.alert("Character list copied to clipboard.");
     });
 
+    // catch escape if floaing windows are up
+    document.onkeydown = function(event) {
+        if ( event.key != "Escape" ) {
+            return;
+        }
+
+        const popUp = document.getElementById("importPopUp");
+        if (popUp) {
+            //const inputArea = document.getElementById("importTextArea");
+            //inputArea.focus();
+            popUp.remove();
+        }
+    }
+
     // Import button
     const importCell = document.createElement("td");
     importCell.style.textAlign = "center";
@@ -153,11 +167,39 @@ export function addAdminSection() {
     importButton.innerText = "Import";
     importButton.id = "importButton";
     adminRow.appendChild(importCell);
-    importButton.addEventListener("click", function() {
-        const data = prompt("Paste the exported data here.");
-        const characterList = JSON.parse(atob(data));
-        for (const character of characterList) {
-            addCharacter(character.realm, character.name);
-        }
+    importButton.addEventListener("mousedown", function(event) {
+        console.log(event);
+        event.preventDefault();
+        const popUp = document.createElement("div");
+        popUp.id = "importPopUp";
+        popUp.className = "popUp";
+        const textArea = document.createElement("textarea");
+        textArea.id = "importTextArea";
+        textArea.style.resize = "none";
+        textArea.style.width = "80%";
+        textArea.style.height = "80%";
+        textArea.style.position = "absolute";
+        textArea.style.top = "10%";
+        textArea.style.left = "10%";
+        textArea.placeholder = "Paste the exported data here.";
+        textArea.focus();
+        popUp.appendChild(textArea);
+        const closeButton = document.createElement("button");
+        closeButton.style.position = "absolute";
+        closeButton.style.width = "20%";
+        closeButton.style.left = "40%";
+        closeButton.style.bottom = "3%";
+        closeButton.innerText = "Import";
+        closeButton.addEventListener("click", function() {
+            const data = document.getElementById("importTextArea").value
+            console.log(data)
+            const characterList = JSON.parse(atob(data));
+            for (const character of characterList) {
+                addCharacter(character.realm, character.name);
+            }
+            popUp.remove();
+        });
+        popUp.appendChild(closeButton);
+        document.body.appendChild(popUp);
     });
 }
