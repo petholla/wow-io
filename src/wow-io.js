@@ -34,7 +34,6 @@ async function addCharacterHandler(event) {
 }
 
 export async function addCharacter(realm, name) {
-
     // capitalize character name
     name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
@@ -152,9 +151,6 @@ function refreshTable() {
     let index = 1;
     for (const character of myCharacters.sort((a, b) => b.io - a.io)) {
         const row = document.createElement("tr");
-        if (index % 2 == 0) {
-            row.style.backgroundColor = "#231416";
-        }
         const cell = document.createElement("td");
         //cell.style.width = "5%";
         cell.style.textAlign = "right";
