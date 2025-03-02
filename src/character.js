@@ -34,13 +34,15 @@ export default class Character {
 
         logMessage(`Fetching ${this.key} from raider.io`);
 
+        let season = localStorage.getItem("currentSeason");
+
         const myRequest = new Request(
             "https://raider.io/api/v1/characters/profile?" +
                 new URLSearchParams({
                     region: "us",
                     realm: this.realm,
                     name: this.name,
-                    fields: "mythic_plus_scores_by_season:current,mythic_plus_best_runs,gear",
+                    fields: `mythic_plus_scores_by_season:${season},mythic_plus_best_runs,gear`,
                 })
         );
 

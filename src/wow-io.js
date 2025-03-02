@@ -1,11 +1,13 @@
 import Character from "./character.js";
-import { addNewCharacterForm, addNotesSection, addAdminSection } from "./ui.js";
+import { addNewCharacterForm, addNotesSection, addAdminSection, addSeasonSelector } from "./ui.js";
 import { refreshCounter } from "./refresh.js";
-import { setDebugMode, logMessage, sleep } from "./common.js";
+import { setDebugMode, logMessage, sleep, get_seasons } from "./common.js";
 
 export let myCharacters = [];
 
 addNewCharacterForm(addCharacterHandler);
+
+await addSeasonSelector();
 
 // load data from browser storage
 loadData();
@@ -93,8 +95,13 @@ function refreshTable() {
     tableBody.appendChild(myTable);
 
     const fields = ["#", "Image", "Realm", "Name", "Class", "Spec", "Role", "iLvl", "IO"];
-    const dungeons = ["ARAK", "COT", "DAWN", "GB", "MISTS", "NW", "SIEGE", "SV"]
-
+    // const dungeons = ["ARAK", "COT", "DAWN", "GB", "MISTS", "NW", "SIEGE", "SV"]
+    let dungeons = ["x", "x", "x", "x", "x", "x", "x", "x"];
+    const dungeonList = localStorage.getItem("dungeons");
+    if (dungeonList) {
+        dungeons = JSON.parse(dungeonList);
+    }
+    
     // add header row
     const header = document.createElement("tr");
     for (const field of fields) {

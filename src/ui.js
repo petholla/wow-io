@@ -1,5 +1,5 @@
-import { setDebugMode } from "./common.js";
-import { myCharacters, addCharacter } from "./wow-io.js";
+import { get_seasons, setDebugMode, logMessage } from "./common.js";
+import { myCharacters, addCharacter, reloadAllCharacters } from "./wow-io.js";
 
 export function addNewCharacterForm(eventFunction) {
     // add character form
@@ -87,6 +87,53 @@ export function addNotesSection() {
     notesCell.innerHTML += "<li>Key levels are highlighted in yellow at 10 or above (portals).</li>";
 }
 
+// Add season selector
+export async function addSeasonSelector() {
+    const seasonDiv = document.getElementById("seasonDiv");
+    const seasonTable = document.createElement("table");
+    seasonTable.style.textAlign = "center";
+    seasonDiv.appendChild(seasonTable);
+    const headerRow = document.createElement("tr");
+    seasonTable.appendChild(headerRow);
+    const seasonHeader = document.createElement("th");
+    seasonHeader.className = "rounded";
+    seasonHeader.innerText = "Season";
+    headerRow.appendChild(seasonHeader);
+
+    const seasonRow = document.createElement("tr");
+    seasonTable.appendChild(seasonRow);
+    const seasonCell = document.createElement("td");
+    seasonRow.appendChild(seasonCell);
+
+    const seasons = await get_seasons();
+
+    const dungeon_map = new Map();
+
+    function compare_dates(a, b) {
+        const date1 = Date.parse(a.starts.us);
+        const date2 = Date.parse(b.starts.us);
+        return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
+    }
+
+    for (const season of seasons.toSorted(compare_dates)) {
+        // ignore ptr/beta/btm seasons
+        if (season.slug.includes("ptr") || season.slug.includes("beta") || season.slug.includes("break")) {
+            continue;
+        }
+   
+        let dungeonShostnames = []
+        for (const dungeon of season.dungeons.toSorted()) {
+            dungeonShostnames.push(dungeon.short_name);
+        }
+        dungeon_map.set(season.slug, dungeonShostnames);
+
+        localStorage.setItem("currentSeason", season.slug);
+        localStorage.setItem("dungeons", JSON.stringify(dungeon_map.get(season.slug)));
+        seasonCell.innerHTML = season.name;
+        break;
+    }
+}
+
 // Add 'Admin' section
 export function addAdminSection() {
     const adminDiv = document.getElementById("AdminDiv");
@@ -151,7 +198,7 @@ export function addAdminSection() {
             return;
         }
 
-        const popUp = document.getElementById("importPopUp");
+        const popUp = document.getElementById("popUpDiv");
         if (popUp) {
             popUp.remove();
         }
@@ -165,31 +212,29 @@ export function addAdminSection() {
     importButton.innerText = "Import";
     importButton.id = "importButton";
     adminRow.appendChild(importCell);
+
     importButton.addEventListener("click", function(event) {
-        if (document.getElementById("importPopUp")) {
+        if (document.getElementById("popUpDiv")) {
             return;
         }
-        event.preventDefault();
-        const popUp = document.createElement("div");
-        popUp.id = "importPopUp";
-        popUp.className = "popUp";
+        const popUpDiv = document.createElement("div");
+        popUpDiv.id = "popUpDiv";
+        popUpDiv.className = "popup";
+        document.body.appendChild(popUpDiv);
         const textArea = document.createElement("textarea");
+        textArea.className = "importTextArea";
         textArea.id = "importTextArea";
-        textArea.style.resize = "none";
-        textArea.style.width = "80%";
-        textArea.style.height = "80%";
-        textArea.style.position = "absolute";
-        textArea.style.top = "10%";
-        textArea.style.left = "10%";
-        textArea.placeholder = "Paste the exported data here, or press Escape to close.";
-        popUp.appendChild(textArea);
+        textArea.placeholder = "Paste exported data here.";
+        popUpDiv.appendChild(textArea);
         const closeButton = document.createElement("button");
-        closeButton.style.position = "absolute";
-        closeButton.style.width = "20%";
-        closeButton.style.left = "40%";
-        closeButton.style.bottom = "3%";
+        closeButton.id = "importCloseButton";
+        closeButton.className = "importCloseButton";
         closeButton.innerText = "Import";
+        popUpDiv.appendChild(closeButton);
         closeButton.addEventListener("click", function() {
+            console.log(event.target);
+            event.preventDefault();
+            event.stopPropagation();
             const data = document.getElementById("importTextArea").value;
             try {
                 const characterList = JSON.parse(atob(data));
@@ -200,12 +245,11 @@ export function addAdminSection() {
             }
             const characterList = JSON.parse(atob(data));
             for (const character of characterList) {
+                logMessage(`Adding ${character.realm}-${character.name}`);
                 addCharacter(character.realm, character.name);
             }
-            popUp.remove();
+            popUpDiv.remove();
         });
-        popUp.appendChild(closeButton);
-        document.body.appendChild(popUp);
         textArea.focus();
     });
 }

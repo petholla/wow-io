@@ -23,3 +23,16 @@ export function logMessage(message) {
         console.log(`${now.toISOString()} [DEBUG] ${message}`);
     }
 }
+
+export async function get_seasons() {
+    const myRequest = new Request(
+        "https://raider.io/api/v1/mythic-plus/static-data?" +
+        new URLSearchParams({
+            expansion_id: 10
+        })
+    );
+
+    const response = await fetch(myRequest);
+    const data = await response.json();
+    return data.seasons;
+}
