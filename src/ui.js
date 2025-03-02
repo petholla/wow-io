@@ -5,7 +5,6 @@ export function addNewCharacterForm(eventFunction) {
     // add character form
     const inputTable = document.createElement("table");
     inputTable.id = "addCharacterTable";
-    inputTable.style.width = "50%";
     const formRow = document.createElement("tr");
     const headers = ["Realm", "Character", ""];
     for (const header of headers) {
@@ -151,7 +150,6 @@ export function addAdminSection() {
     const adminRow = document.createElement("tr");
     adminTable.appendChild(adminRow);
     const debugCell = document.createElement("td");
-    debugCell.style.textAlign = "center";
     adminRow.appendChild(debugCell);
     const debugCheckbox = document.createElement("input");
     debugCheckbox.type = "checkbox";
@@ -172,7 +170,6 @@ export function addAdminSection() {
 
     // Export button
     const exportCell = document.createElement("td");
-    exportCell.style.textAlign = "center";
     const exportButton = document.createElement("button");
     exportCell.appendChild(exportButton);
     exportButton.innerText = "Export";

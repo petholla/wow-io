@@ -57,6 +57,10 @@
             .addCharacterDiv {
                 grid-column: 1;
                 grid-row: 1;
+
+                table {
+                    width: 80%;
+                }
             }
             .seasonDiv {
                 grid-column: 2;
@@ -65,20 +69,40 @@
             .refreshDiv {
                 grid-column: 3;
                 grid-row: 1;
-                justify-self: end;
+                justify-items: right;
+
+                table {
+                    width: 80%;
+                    th, td {
+                        text-align: center;
+                        width: auto;
+                    }
+                }
             }
             .characterTableDiv {
                 grid-column: 1 / 4;
                 grid-row: 2;
             }
             .Notes {
-                grid-column: 1;
+                grid-column: 1 / 3;
                 grid-row: 3;
+
+                table {
+                    width: 100%;
+                }
             }
             .Admin {
-                grid-column: 3;
+                grid-column-end: -1;
                 grid-row: 3;
-                justify-self: end;
+                justify-items: right;
+
+                table {
+                    width: 50%;
+                    th, td {
+                        text-align: center;
+                        width: auto;
+                    }
+                }
             }
             .popup {
                 position: absolute;
