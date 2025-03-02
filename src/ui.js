@@ -13,6 +13,7 @@ export function addNewCharacterForm(eventFunction) {
         th.innerText = header;
         formRow.appendChild(th);
     }
+
     inputTable.appendChild(formRow);
     const formDiv = document.getElementById("addCharacterDiv");
     formDiv.appendChild(inputTable);
@@ -21,6 +22,24 @@ export function addNewCharacterForm(eventFunction) {
     inputTable.appendChild(inputRow);
     const realmCell = document.createElement("td");
     inputRow.appendChild(realmCell);
+
+    // region selector
+    const regionInput = document.createElement("select");
+    regionInput.id = "inputRegion";
+    realmCell.appendChild(regionInput);
+
+    const regions = ["us", "eu", "kr", "tw", "cn"];
+    for (const region of regions) {
+        const option = document.createElement("option");
+        if (region == "us") {
+            option.selected = true;
+        }
+        option.value = region;
+        option.innerText = region;
+        regionInput.appendChild(option);
+    }
+
+    // realm selector
     const realmInput = document.createElement("select");
     realmCell.appendChild(realmInput);
     realmInput.id = "inputRealm";

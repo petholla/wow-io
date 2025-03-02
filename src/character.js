@@ -3,7 +3,8 @@ import { sleep, logMessage } from "./common.js";
 // wow character class
 
 export default class Character {
-    constructor(realm, name) {
+    constructor(region, realm, name) {
+        this.region = region;
         this.realm = realm;
         this.name = name;
         this.class = null;
@@ -39,7 +40,7 @@ export default class Character {
         const myRequest = new Request(
             "https://raider.io/api/v1/characters/profile?" +
                 new URLSearchParams({
-                    region: "us",
+                    region: this.region,
                     realm: this.realm,
                     name: this.name,
                     fields: `mythic_plus_scores_by_season:${season},mythic_plus_best_runs,gear`,

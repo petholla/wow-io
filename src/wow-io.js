@@ -25,17 +25,18 @@ async function addCharacterHandler(event) {
     // prevent a reload
     event.preventDefault();
 
+    const newCharacterRegion = document.getElementById("inputRegion").value;
     const newCharacterRealm = document.getElementById("inputRealm").value;
-    const newCharacterName = document.getElementById("inputCharacter").value;  
+    const newCharacterName = document.getElementById("inputCharacter").value;
 
     //
     const submitButton = document.getElementById("addCharacterButton");
     submitButton.disabled = true;
-    await addCharacter(newCharacterRealm, newCharacterName);
+    await addCharacter(newCharacterRegion, newCharacterRealm, newCharacterName);
     submitButton.disabled = false;
 }
 
-export async function addCharacter(realm, name) {
+export async function addCharacter(region, realm, name) {
     // capitalize character name
     name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
@@ -43,14 +44,14 @@ export async function addCharacter(realm, name) {
 
     // check if character already exists
     for (const character of myCharacters) {
-        if (character.realm == realm && character.name == name) {
-            window.alert(`${name} on ${realm} is already on the list!`);
+        if (character.region == region && character.realm == realm && character.name == name) {
+            window.alert(`${name} on ${region}-${realm} is already on the list!`);
             return;
         }
     }
 
     // add new character
-    const newCharacter = new Character(realm, name);
+    const newCharacter = new Character(region, realm, name);
     await newCharacter.fetchCharacter().then(response => {
         if (response) {
             myCharacters.push(newCharacter);
@@ -70,7 +71,11 @@ function loadData() {
     const data = localStorage.getItem("ioCharacters");
     if (data) {
         for (const character of JSON.parse(data)) {
-            const newCharacter = new Character(character.realm, character.name);
+            let region = "us";
+            if (character.region) {
+                region = character.region;
+            }
+            const newCharacter = new Character(region, character.realm, character.name);
             newCharacter.class = character.class;
             newCharacter.spec = character.spec;
             newCharacter.role = character.role;
