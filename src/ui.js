@@ -15,6 +15,13 @@ export function bigPopUp(id) {
 
     popUpDiv.className = "popup";
     document.body.appendChild(popUpDiv);
+    const closeButton = document.createElement("button");
+    closeButton.innerText = "X";
+    closeButton.className = "closeButton";
+    closeButton.addEventListener("click", function() {
+        popUpDiv.remove();
+    });
+    popUpDiv.appendChild(closeButton);
     const footNote = document.createElement("p");
     footNote.innerText = "Press ESC to close.";
     footNote.style.position = "absolute";
@@ -261,18 +268,6 @@ export function addAdminSection() {
         window.alert("Character list copied to clipboard.");
     });
 
-    // catch escape if floaing windows are up
-    document.onkeydown = function(event) {
-        if ( event.key != "Escape" ) {
-            return;
-        }
-
-        const popUp = document.getElementById("popUpDiv");
-        if (popUp) {
-            popUp.remove();
-        }
-    }
-
     // Import button
     const importCell = document.createElement("td");
     importCell.style.textAlign = "center";
@@ -282,6 +277,7 @@ export function addAdminSection() {
     importButton.id = "importButton";
     adminRow.appendChild(importCell);
 
+    // Import popup
     importButton.addEventListener("click", function(event) {
         if (document.getElementById("popUpDiv")) {
             return;
@@ -299,8 +295,6 @@ export function addAdminSection() {
         closeButton.innerText = "Import";
         popUpDiv.appendChild(closeButton);
         closeButton.addEventListener("click", function() {
-            event.preventDefault();
-            event.stopPropagation();
             const data = document.getElementById("importTextArea").value;
             try {
                 const characterList = JSON.parse(atob(data));

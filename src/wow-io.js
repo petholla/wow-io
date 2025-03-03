@@ -5,6 +5,9 @@ import { setDebugMode, logMessage, sleep, get_seasons } from "./common.js";
 import { loadData, saveData } from "./localstorage.js";
 import { refreshTable, reloadAllCharacters } from "./charactertable.js";
 import { myCharacters } from "./localstorage.js";
+import { closePopUpHandlers } from "./handlers.js";
+
+closePopUpHandlers();
 
 addNewCharacterForm(addCharacterHandler);
 
