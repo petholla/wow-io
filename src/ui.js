@@ -249,6 +249,7 @@ export function addAdminSection() {
         const characterList = [];
         for (const character of myCharacters) {
             characterList.push({
+                region: character.region,
                 realm: character.realm,
                 name: character.name,
             })
@@ -307,6 +308,7 @@ export function addAdminSection() {
                 return;
             }
             const characterList = JSON.parse(atob(data));
+            console.log(characterList);
             for (const character of characterList) {
                 let region = "us"
                 if (character.region) {
