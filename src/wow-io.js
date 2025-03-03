@@ -259,7 +259,7 @@ function refreshTable() {
         const raiderioLinkCell = document.createElement("td");
         raiderioLinkCell.style.textAlign = "center";
         const raiderioLink = document.createElement("a");
-        raiderioLink.title = "Armory";
+        raiderioLink.title = "raider.io";
         raiderioLink.href = `https://raider.io/characters/${character.region}/${character.realm}/${character.name}`;
         raiderioLink.target = "_blank";
         const raiderioImage = document.createElement("img");
