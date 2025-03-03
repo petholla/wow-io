@@ -37,7 +37,7 @@ async function addCharacterHandler(event) {
     submitButton.disabled = false;
 }
 
-export async function addCharacter(region, realm, name, mine = false) {
+export async function addCharacter(region, realm, name) {
     // capitalize character name
     name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
@@ -53,7 +53,6 @@ export async function addCharacter(region, realm, name, mine = false) {
 
     // add new character
     const newCharacter = new Character(region, realm, name);
-    newCharacter.mine = mine;
     await newCharacter.fetchCharacter().then(response => {
         if (response) {
             myCharacters.push(newCharacter);

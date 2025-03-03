@@ -253,7 +253,6 @@ export function addAdminSection() {
                 region: character.region,
                 realm: character.realm,
                 name: character.name,
-                mine: character.mine,
             })
         }
         const data = btoa(JSON.stringify(characterList));
