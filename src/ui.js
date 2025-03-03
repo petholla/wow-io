@@ -263,7 +263,8 @@ export function addAdminSection() {
                 name: character.name,
             })
         }
-        const data = btoa(JSON.stringify(characterList));
+        const encoded = encodeURIComponent(JSON.stringify(characterList));
+        const data = btoa(encoded);
         navigator.clipboard.writeText(data);
         window.alert("Character list copied to clipboard.");
     });
@@ -296,15 +297,16 @@ export function addAdminSection() {
         popUpDiv.appendChild(closeButton);
         closeButton.addEventListener("click", function() {
             const data = document.getElementById("importTextArea").value;
+            const decoded = decodeURIComponent(atob(data));
+            let characterList;
             try {
-                const characterList = JSON.parse(atob(data));
+                characterList = JSON.parse(decoded);
             }
             catch (error) {
-                window.alert("Invalid data.");
+                window.alert("Invalid data: " + error);
                 return;
             }
-            const characterList = JSON.parse(atob(data));
-            console.log(characterList);
+
             for (const character of characterList) {
                 let region = "us"
                 if (character.region) {
