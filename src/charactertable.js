@@ -43,7 +43,8 @@ export function refreshTable() {
         const cell = document.createElement("th");
         cell.style.width = "3%";
         cell.style.textAlign = "center";
-        cell.innerText = dungeon;
+        cell.innerText = dungeon.shortname;
+        cell.title = dungeon.name;
         header.appendChild(cell);
     }
 

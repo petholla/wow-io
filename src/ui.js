@@ -200,7 +200,7 @@ export async function addSeasonSelector() {
    
         let dungeonShostnames = []
         for (const dungeon of season.dungeons.toSorted()) {
-            dungeonShostnames.push(dungeon.short_name);
+            dungeonShostnames.push({"name": dungeon.name, "shortname": dungeon.short_name});
         }
         dungeon_map.set(season.slug, dungeonShostnames);
 
