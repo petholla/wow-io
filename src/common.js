@@ -36,3 +36,7 @@ export async function get_seasons() {
     const data = await response.json();
     return data.seasons;
 }
+
+export function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}

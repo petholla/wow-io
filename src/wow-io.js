@@ -25,14 +25,15 @@ async function addCharacterHandler(event) {
     // prevent a reload
     event.preventDefault();
 
-    const newCharacterRegion = document.getElementById("inputRegion").value;
-    const newCharacterRealm = document.getElementById("inputRealm").value;
+    const newCharacterRealm = document.getElementById("inputRealm");
+    const newCharacterRegion = newCharacterRealm.options[newCharacterRealm.selectedIndex].region;
+    const newCharacterRealmName = newCharacterRealm.options[newCharacterRealm.selectedIndex].realm;
     const newCharacterName = document.getElementById("inputCharacter").value;
 
     //
     const submitButton = document.getElementById("addCharacterButton");
     submitButton.disabled = true;
-    await addCharacter(newCharacterRegion, newCharacterRealm, newCharacterName);
+    await addCharacter(newCharacterRegion, newCharacterRealmName, newCharacterName);
     submitButton.disabled = false;
 }
 
@@ -99,7 +100,7 @@ function refreshTable() {
     const myTable = document.createElement("table");
     tableBody.appendChild(myTable);
 
-    const fields = ["#", "Image", "Realm", "Name", "Class", "Spec", "Role", "iLvl", "IO"];
+    const fields = ["#", "Image", "Region", "Realm", "Name", "Class", "Spec", "Role", "iLvl", "IO"];
     // const dungeons = ["ARAK", "COT", "DAWN", "GB", "MISTS", "NW", "SIEGE", "SV"]
     let dungeons = ["x", "x", "x", "x", "x", "x", "x", "x"];
     const dungeonList = localStorage.getItem("dungeons");
@@ -117,6 +118,7 @@ function refreshTable() {
         }
         else if (["Class", "Spec", "Role"].includes(field)) {
             cell.style.width = "8%";
+            cell.style.textAlign = "left";
         }
         else if (["iLvl", "IO"].includes(field)) {
             cell.style.textAlign = "right";
@@ -302,7 +304,7 @@ function refreshTable() {
     update_all_row.className = "rounded";
     const update_all_cell = document.createElement("td");
     update_all_cell.style.textAlign = "center";
-    update_all_cell.colSpan = 23;
+    update_all_cell.colSpan = 24;
     const update_all_button = document.createElement("button");
     update_all_button.innerText = "Update All";
     update_all_button.addEventListener("click", handleEvent);

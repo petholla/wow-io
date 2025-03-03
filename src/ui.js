@@ -1,5 +1,68 @@
 import { get_seasons, setDebugMode, logMessage } from "./common.js";
 import { myCharacters, addCharacter, reloadAllCharacters } from "./wow-io.js";
+import { RealmManager, sortRealms } from "./realms.js";
+
+export function bigPopUp(id) {
+    const popUpDiv = document.createElement("div");
+
+    if (id) {
+        popUpDiv.id = id;
+    }
+    else {
+        popUpDiv.id = "popUpDiv";
+    }
+
+    popUpDiv.className = "popup";
+    document.body.appendChild(popUpDiv);
+    const footNote = document.createElement("p");
+    footNote.innerText = "Press ESC to close.";
+    footNote.style.position = "absolute";
+    footNote.style.fontSize = "small";
+    footNote.style.bottom = "0";
+    footNote.style.right = "10";
+    popUpDiv.appendChild(footNote);
+
+    return popUpDiv;
+}
+
+export function reloadRealmSelector() {
+    const realmSelector = document.getElementById("inputRealm");
+    realmSelector.innerHTML = "";
+    
+    const realmManager = new RealmManager();
+    const realms = realmManager.getRealms();
+
+    const addButton = document.getElementById("addCharacterButton");
+    const addInput = document.getElementById("inputCharacter");
+
+    if (realms.length == 0) {
+        const option = document.createElement("option");
+        option.innerText = "Add realms by clicking the 'Realms' header above.";
+        option.disabled = true;
+        option.selected = true;
+        realmSelector.appendChild(option);
+
+        addButton.disabled = true;
+        addInput.disabled = true;
+    }
+    else {
+        addButton.disabled = false;
+        addInput.disabled = false;
+
+        for (const realm of realms.toSorted(sortRealms)) {
+            const option = document.createElement("option");
+            const realmName = `(${realm.region}) ${realm.realm}`;
+            if (realm == "Fizzcrank") {
+                option.selected = true;
+            }
+            option.region = realm.region;
+            option.realm = realm.realm;
+            option.innerText = realmName;
+            realmSelector.appendChild(option);
+        }
+    }
+}
+
 
 export function addNewCharacterForm(eventFunction) {
     // add character form
@@ -9,6 +72,16 @@ export function addNewCharacterForm(eventFunction) {
     const headers = ["Realm", "Character", ""];
     for (const header of headers) {
         const th = document.createElement("th");
+        if (header == "Realm") {
+            th.id = "realmHeader";
+            th.title = "Click to edit realm list.";
+
+            const realmManager = new RealmManager();
+
+            th.addEventListener("click", function() {
+                realmManager.editRealms();
+            });
+        }
         th.className = "rounded";
         th.innerText = header;
         formRow.appendChild(th);
@@ -23,37 +96,10 @@ export function addNewCharacterForm(eventFunction) {
     const realmCell = document.createElement("td");
     inputRow.appendChild(realmCell);
 
-    // region selector
-    const regionInput = document.createElement("select");
-    regionInput.id = "inputRegion";
-    realmCell.appendChild(regionInput);
-
-    const regions = ["us", "eu", "kr", "tw", "cn"];
-    for (const region of regions) {
-        const option = document.createElement("option");
-        if (region == "us") {
-            option.selected = true;
-        }
-        option.value = region;
-        option.innerText = region;
-        regionInput.appendChild(option);
-    }
-
     // realm selector
     const realmInput = document.createElement("select");
     realmCell.appendChild(realmInput);
     realmInput.id = "inputRealm";
-
-    const realms = ["Fizzcrank", "Aggramar", "Gorefiend"];
-    for (const realm of realms) {
-        const option = document.createElement("option");
-        if (realm == "Fizzcrank") {
-            option.selected = true;
-        }
-        option.value = realm;
-        option.innerText = realm;
-        realmInput.appendChild(option);
-    }
 
     // Character name input
     const characterInput = document.createElement("input");
@@ -79,8 +125,8 @@ export function addNewCharacterForm(eventFunction) {
     submitButton.innerText = "Add Character";
     submitButton.addEventListener("click", eventFunction);
 
-/*    const lineBreak = document.createElement("br");  
-    formDiv.appendChild(lineBreak);*/
+    // we reload here to we can disable stuff if no realms are available
+    reloadRealmSelector();
 }
 
 // Add 'Notes' section
@@ -103,6 +149,8 @@ export function addNotesSection() {
     notesRow.appendChild(notesCell);
     notesCell.innerHTML = "<li>You can click on a character name to highlight it (e.g. your alts). Click again to unhighlight.</li>";
     notesCell.innerHTML += "<li>Key levels are highlighted in yellow at 10 or above (portals).</li>";
+    notesCell.innerHTML += "<li>You can add/remove realms by clicking the 'Realm' header in the add new character section in the top left corner.</li>";
+    notesCell.innerHTML += "<li>Please send feedback to <b><i>wow-io@petholla.com</i></b>.</li>";
 }
 
 // Add season selector
@@ -233,10 +281,8 @@ export function addAdminSection() {
         if (document.getElementById("popUpDiv")) {
             return;
         }
-        const popUpDiv = document.createElement("div");
-        popUpDiv.id = "popUpDiv";
-        popUpDiv.className = "popup";
-        document.body.appendChild(popUpDiv);
+        
+        const popUpDiv = bigPopUp("popUpDiv");
         const textArea = document.createElement("textarea");
         textArea.className = "importTextArea";
         textArea.id = "importTextArea";
@@ -248,7 +294,6 @@ export function addAdminSection() {
         closeButton.innerText = "Import";
         popUpDiv.appendChild(closeButton);
         closeButton.addEventListener("click", function() {
-            console.log(event.target);
             event.preventDefault();
             event.stopPropagation();
             const data = document.getElementById("importTextArea").value;
@@ -261,8 +306,12 @@ export function addAdminSection() {
             }
             const characterList = JSON.parse(atob(data));
             for (const character of characterList) {
-                logMessage(`Adding ${character.realm}-${character.name}`);
-                addCharacter(character.realm, character.name);
+                let region = "us"
+                if (character.region) {
+                    region = character.region
+                }
+                logMessage(`Adding ${region}-${character.realm}-${character.name}`);
+                addCharacter(region, character.realm, character.name);
             }
             popUpDiv.remove();
         });
