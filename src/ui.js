@@ -150,7 +150,7 @@ export function addNotesSection() {
     notesCell.innerHTML = "<li>This is a simple web app to track m+ IO scores (from raider.io) for different characters (yours, friends, etc). All data stored locally in the browser.</li>";
     notesCell.innerHTML += "<li>To get started, click on the Realm header in the top left corner to add realms you have toons to track on, then you can start adding characters.</li>";
     notesCell.innerHTML += "<li>You can click on a character name to highlight it (e.g. your alts). Click again to unhighlight.</li>";
-    notesCell.innerHTML += "<li>To share characters with friends or just between different browsers by exporting then importing the list (bottom right).</li>";
+    notesCell.innerHTML += "<li>You can share characters with friends or just between different browsers by exporting then importing the list (bottom right buttons).</li>";
     notesCell.innerHTML += "<li>Key levels are highlighted in yellow at 10 or above (portals).</li>";
     notesCell.innerHTML += "<li>Please send feedback to <b><i>wow-io@petholla.com</i></b>.</li>";
 }
