@@ -37,7 +37,7 @@ async function addCharacterHandler(event) {
     submitButton.disabled = false;
 }
 
-export async function addCharacter(region, realm, name) {
+export async function addCharacter(region, realm, name, mine = false) {
     // capitalize character name
     name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
@@ -53,6 +53,7 @@ export async function addCharacter(region, realm, name) {
 
     // add new character
     const newCharacter = new Character(region, realm, name);
+    newCharacter.mine = mine;
     await newCharacter.fetchCharacter().then(response => {
         if (response) {
             myCharacters.push(newCharacter);
@@ -163,7 +164,7 @@ function refreshTable() {
     }
 
     let index = 1;
-    for (const character of myCharacters.sort((a, b) => b.io - a.io)) {
+    for (const character of myCharacters.sort((a, b) => b.io - a.io || b.ilvl - a.ilvl)) {
         const row = document.createElement("tr");
         const cell = document.createElement("td");
         //cell.style.width = "5%";
