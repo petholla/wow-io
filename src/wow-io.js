@@ -247,7 +247,7 @@ function refreshTable() {
         armoryLinkCell.style.textAlign = "center";
         const armoryLink = document.createElement("a");
         armoryLink.title = "Armory";
-        armoryLink.href = `https://worldofwarcraft.com/en-us/character/us/${character.realm}/${character.name}`;
+        armoryLink.href = `https://worldofwarcraft.com/en-us/character/${character.region}/${character.realm}/${character.name}`;
         armoryLink.target = "_blank";
         const armoryImage = document.createElement("img");
         armoryImage.src = "img/armory.svg";
@@ -260,7 +260,7 @@ function refreshTable() {
         raiderioLinkCell.style.textAlign = "center";
         const raiderioLink = document.createElement("a");
         raiderioLink.title = "Armory";
-        raiderioLink.href = `https://raider.io/characters/us/${character.realm}/${character.name}`;
+        raiderioLink.href = `https://raider.io/characters/${character.region}/${character.realm}/${character.name}`;
         raiderioLink.target = "_blank";
         const raiderioImage = document.createElement("img");
         raiderioImage.src = "img/raiderio.svg";
