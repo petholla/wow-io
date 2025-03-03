@@ -1,6 +1,7 @@
 import { get_seasons, setDebugMode, logMessage } from "./common.js";
-import { myCharacters, addCharacter, reloadAllCharacters } from "./wow-io.js";
+import { addCharacter } from "./wow-io.js";
 import { RealmManager, sortRealms } from "./realms.js";
+import { myCharacters } from "./localstorage.js";
 
 export function bigPopUp(id) {
     const popUpDiv = document.createElement("div");

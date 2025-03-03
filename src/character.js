@@ -1,8 +1,10 @@
 import { sleep, logMessage } from "./common.js";
+import { myCharacters, saveData} from "./localstorage.js";
+import { refreshTable } from "./charactertable.js";
 
 // wow character class
 
-export default class Character {
+export class Character {
     constructor(region, realm, name) {
         this.region = region;
         this.realm = realm;
@@ -20,8 +22,17 @@ export default class Character {
         this.loading = false;
     }
 
+    // get the key for this character
     get key() {
         return `${this.realm}-${this.name}`;
+    }
+
+    delete() {
+        // delete this character
+        const index = myCharacters.indexOf(this);
+        myCharacters.splice(index, 1);
+        saveData();
+        refreshTable();
     }
 
     async fetchCharacter() {
@@ -32,8 +43,6 @@ export default class Character {
             document.getElementById("statusCell-" + this.key).innerHTML =
                 "<img src='img/load-37_256.gif' width='20px' height='20px' />";
         }
-
-        logMessage(`Fetching ${this.key} from raider.io`);
 
         let season = localStorage.getItem("currentSeason");
 
@@ -47,11 +56,11 @@ export default class Character {
                 })
         );
 
-        const response = await fetch(myRequest);
-
-        // pretend to wait for the response to make it look better
-        const random = Math.random() * 1000;
+        // add a little delay so we're not DDOSing the server
+        const random = Math.random() * 2000;
         await sleep(random);
+
+        const response = await fetch(myRequest);
 
         this.loading = false;
 
@@ -105,6 +114,9 @@ export default class Character {
         if (changed) {
             this.updated = new Date();
         }
+
+        saveData();
+        refreshTable();
 
         return true;
     }
