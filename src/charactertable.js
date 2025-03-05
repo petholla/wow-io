@@ -127,18 +127,17 @@ export function refreshTable() {
         // loop thru all the dungeon scores
         for (const dungeon of dungeons) {
             const cell = document.createElement("td");
-            //cell.style.width = "50px";
             cell.style.textAlign = "center";
-            cell.innerText = "";
+            cell.innerText = "-";
             if (character.best_runs) {
-                if (dungeon in character.best_runs) {
-                    const just_key = Number(character.best_runs[dungeon].split("*")[0]);
-                    if ((just_key == 10 && character.best_runs[dungeon].includes("*")) || just_key >= 11) {
+                if (dungeon.shortname in character.best_runs) {
+                    const just_key = Number(character.best_runs[dungeon.shortname].split("*")[0]);
+                    if ((just_key == 10 && character.best_runs[dungeon.shortname].includes("*")) || just_key >= 11) {
                         cell.style.color = "yellow";
                         cell.style.fontWeight = "bold";
                         cell.title = "Portal aquired!";
                     }
-                    cell.innerText = character.best_runs[dungeon];
+                    cell.innerText = character.best_runs[dungeon.shortname];
                 }
             }
             row.appendChild(cell);
